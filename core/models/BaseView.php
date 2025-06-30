@@ -2,9 +2,12 @@
 
 namespace core\models;
 
+use core\exceptions\NotFoundFileException;
+
 class BaseView
 {
     public string $layout = "";
+    private string $layoutDefault = "main.php";
     public $controller = "";
     private $cssFiles = [];
     private $pathCss = WEB_PATH . "css/";
@@ -12,9 +15,9 @@ class BaseView
 
 
     public function __construct()
-    {
-        $this->layout = LAYOUT_FILE;
+    {        
         $this->cssFiles[] = $this->pathCss . $this->mainCss;
+        $this->layout = LAYOUT_PATH . $this->layoutDefault;
         // var_dump($this->cssFiles);
         // die;
     }
@@ -24,6 +27,7 @@ class BaseView
         $content = <<<HTML
             <div>index page</div>
         HTML;
+
         if (!empty($fileHtml)) {
             $content = $this->renderFile(VIEW_PATH
                 . $this->controller . "/"
@@ -37,6 +41,9 @@ class BaseView
 
     public function renderFile(string $fileHtml, array $data = [])
     {
+        if (!file_exists($fileHtml)) {
+           throw new NotFoundFileException("Файл представления $fileHtml не найден!");
+        }
         extract($data);
         ob_start();
         include $fileHtml;

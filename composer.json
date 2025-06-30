@@ -5,6 +5,7 @@
       "app\\models\\": "models/",
       "app\\controllers\\": "controllers/",
       "core\\": "./core/",
+      "core\\exceptions\\": "./core/models/exceptions/",
       "core\\models\\": "./core/models/",
       "core\\controllers\\": "./core/controllers/"
     }

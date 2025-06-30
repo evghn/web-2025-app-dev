@@ -29,5 +29,5 @@ try {
 
     AppController::run();
 } catch (Exception $e) {
-    var_dump($e->getMessage());
+    
 }

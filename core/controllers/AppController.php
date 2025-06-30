@@ -1,6 +1,8 @@
 <?php
 namespace core\controllers;
 
+use app\controllers\SiteController;
+
 class AppController
 {
     
@@ -10,7 +12,7 @@ class AppController
 
     private function __construct()
     {
-        
+        $this->controller = "Index";
     }
 
     private static function getInstance()
@@ -24,13 +26,17 @@ class AppController
 
     public static function run()
     {
-        $self = static::getInstance();
-        // $self->route();
-        
+        try {
+            $self = static::getInstance();
+            // $self->route();
 
+            // $controller = new IndexController();
+            // echo $controller->actionIndex();
+            echo (new SiteController)->actionIndex();
+        } catch(\Exception $e) {
+            var_dump($e->getMessage());
 
-        $controller = new IndexController();
-        echo $controller->actionIndex();
+        }
     }
 
 
@@ -42,6 +48,6 @@ class AppController
 
         }
 
-        die;
+        // die;
     }
 }
