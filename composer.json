@@ -1,0 +1,14 @@
+{
+  "autoload": {
+    "psr-4": {
+      "app\\": "",
+      "app\\models\\": "models/",
+      "app\\controllers\\": "controllers/",
+      "core\\": "./core/",
+      "core\\models\\": "./core/models/"
+    }
+  },
+  "require": {
+    "doctrine/dbal": "^4.2"
+  }
+}
