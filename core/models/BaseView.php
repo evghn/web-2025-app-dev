@@ -7,7 +7,7 @@ class BaseView
     public string $layout = "";
     public $controller = "";
     private $cssFiles = [];
-    private $pathCss = "/assets/css/";
+    private $pathCss = WEB_PATH . "css/";
     private $mainCss = "main.css";
 
 
@@ -19,11 +19,16 @@ class BaseView
         // die;
     }
 
-    public function render(string $fileHtml, array $data = []): string
+    public function render(string $fileHtml = "", array $data = []): string
     {
-        $content = $this->renderFile(VIEW_PATH
-            . $this->controller . "/"
-            . "$fileHtml.php", $data);
+        $content = <<<HTML
+            <div>index page</div>
+        HTML;
+        if (!empty($fileHtml)) {
+            $content = $this->renderFile(VIEW_PATH
+                . $this->controller . "/"
+                . "$fileHtml.php", $data);
+        }
 
         $data = ["content" => $content];
 
@@ -48,7 +53,11 @@ class BaseView
 
     public function getCssFiles()
     {
-
-        return implode("\n", array_map(fn($val) => "<link rel=\"stylesheet\" href=\"$val\">", $this->cssFiles));
+        return implode("\n", array_map(function($val) {           
+            if (file_exists(APP_PATH . $val)) {
+                return "<link rel=\"stylesheet\" href=\"$val\">";
+            }
+            return "";
+        } , $this->cssFiles));
     }
 }

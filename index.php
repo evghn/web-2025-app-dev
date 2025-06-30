@@ -4,6 +4,7 @@ use app\controllers\SiteController;
 use core\models\Db;
 
 use app\models\Article;
+use core\controllers\AppController;
 use core\models\BaseView;
 
 // use app\models\Db;
@@ -26,8 +27,7 @@ try {
     // $view->controller = "site";
     // echo $view->render("index", ["name" => "User NAme"]);
 
-    $conroller = new SiteController();
-    $conroller->render('index', ["name" => "userrr"]);
+    AppController::run();
 } catch (Exception $e) {
     var_dump($e->getMessage());
 }

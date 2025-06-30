@@ -2,31 +2,23 @@
 
 namespace app\controllers;
 
-use core\models\BaseView;
+use core\controllers\WebController;
 
-class SiteController
+
+class SiteController extends WebController
 {
-    public object $view;
-
-    public function __construct()
+    public function actionIndex()
     {
-        $this->view = new BaseView();
-        // var_dump(pathinfo($this::class));
-        // die;
-        $this->view->controller = $this->getId();
+        $data = [
+            "user" => "user - name",
+        ];
+        return $this->render('index', compact('data'));
     }
 
-    public function render(string $fileHtml, array $data = [])
+    public function actionAbout()
     {
-        echo $this->view->render($fileHtml, $data);
+        return $this->render('about');
     }
 
-    public function getId()
-    {
-        $fileName = strtolower(pathinfo($this::class)["filename"]);
-
-        if (($pos = strpos($fileName, "controller")) !== false) {
-            return substr($fileName, 0, $pos);
-        }
-    }
+    
 }

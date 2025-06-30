@@ -11,7 +11,9 @@
 
 <body>
     Страница
-    <?= $content ?>
+    <div>
+        <?= $content ?>
+    </div>
     <footer>
         footer
     </footer>
