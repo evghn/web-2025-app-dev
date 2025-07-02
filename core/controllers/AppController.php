@@ -1,19 +1,21 @@
 <?php
+
 namespace core\controllers;
 
 use app\controllers\SiteController;
+use core\exceptions\NotFoundException;
+
 
 class AppController
 {
-    
-    private static ?object $_self = null;
-    private string $controller = "site";
-    private string $action = "index";
 
-    private function __construct()
-    {
-        $this->controller = "Index";
-    }
+    private static ?object $_self = null;
+    private ?string $controller = null;
+    private string $defController = "site";
+    private ?string $action = null;
+    private string $defAction = "index";
+    private string $namespaceController = "app\\controllers\\";
+
 
     private static function getInstance()
     {
@@ -28,26 +30,50 @@ class AppController
     {
         try {
             $self = static::getInstance();
-            // $self->route();
+            $self->route();
+            if (!class_exists($self->controller)) {
+                throw new NotFoundException("$self->controller not found!");
+            }
 
-            // $controller = new IndexController();
+            $controller = new $self->controller();
+
             // echo $controller->actionIndex();
-            echo (new SiteController)->actionIndex();
-        } catch(\Exception $e) {
-            var_dump($e->getMessage());
-
+            // echo (new SiteController)->actionIndex();
+        } catch (\Exception $e) {
+            $error  = new ErrorController($e->getMessage());
+            echo $error->render();
         }
     }
 
 
-    private function route()
+    private function route(): void
     {
-        $data = explode("/", $_SERVER["REQUEST_URI"]);
-        $controller = $data[1];
-        if (empty($controller)) {
+        $url = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+        $url = trim($url, "/");
 
-        }
+        $urlParts = array_filter(explode("/", $url));
 
-        // die;
+        $this->controller = !empty($urlParts[0])
+            ? $this->getControllerName($urlParts[0])
+            : $this->getControllerName($this->defController);
+
+        $this->action = !empty($urlParts[1])
+            ? $this->getActionName($urlParts[1])
+            : $this->getActionName($this->defAction);
+    }
+
+    private function getControllerName($controller)
+    {
+        return
+            $this->namespaceController
+            . ucfirst($controller)
+            . "Controller";
+    }
+
+    private function getActionName($action)
+    {
+        return
+            "action"
+            . ucfirst($action);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace core\models;
 
+use core\exceptions\NotFoundException;
 use core\exceptions\NotFoundFileException;
 
 class BaseView
@@ -10,12 +11,13 @@ class BaseView
     private string $layoutDefault = "main.php";
     public $controller = "";
     private $cssFiles = [];
-    private $pathCss = WEB_PATH . "css/";
-    private $mainCss = "main.css";
+    private string $pathCss = WEB_PATH . "css/";
+    private string $mainCss = "main.css";
+    private string $viewPath = VIEW_PATH;
 
 
     public function __construct()
-    {        
+    {
         $this->cssFiles[] = $this->pathCss . $this->mainCss;
         $this->layout = LAYOUT_PATH . $this->layoutDefault;
         // var_dump($this->cssFiles);
@@ -24,14 +26,21 @@ class BaseView
 
     public function render(string $fileHtml = "", array $data = []): string
     {
-        $content = <<<HTML
-            <div>index page</div>
-        HTML;
+
 
         if (!empty($fileHtml)) {
-            $content = $this->renderFile(VIEW_PATH
-                . $this->controller . "/"
-                . "$fileHtml.php", $data);
+            $content = $this->renderFile(
+                $this->viewPath
+                    . $this->controller . "/"
+                    . "$fileHtml.php",
+                $data
+            );
+        } else {
+            if (empty($data)) {
+                $content = "";
+            } else {
+                $content = $data["content"];
+            }
         }
 
         $data = ["content" => $content];
@@ -42,7 +51,7 @@ class BaseView
     public function renderFile(string $fileHtml, array $data = [])
     {
         if (!file_exists($fileHtml)) {
-           throw new NotFoundFileException("Файл представления $fileHtml не найден!");
+            throw new NotFoundException("Файл представления $fileHtml не найден!");
         }
         extract($data);
         ob_start();
@@ -60,11 +69,11 @@ class BaseView
 
     public function getCssFiles()
     {
-        return implode("\n", array_map(function($val) {           
+        return implode("\n", array_map(function ($val) {
             if (file_exists(APP_PATH . $val)) {
                 return "<link rel=\"stylesheet\" href=\"$val\">";
             }
             return "";
-        } , $this->cssFiles));
+        }, $this->cssFiles));
     }
 }

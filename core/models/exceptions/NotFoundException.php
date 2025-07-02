@@ -1,6 +1,7 @@
 <?php
+
 namespace core\exceptions;
 
 use Exception;
 
-class NotFoundFileException extends Exception {}
+class NotFoundException extends Exception {}
