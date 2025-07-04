@@ -12,6 +12,9 @@
 <body>
     Страница
     <div>
+        <a href="/user/register">Регистрация</a>
+    </div>
+    <div>
         <?= $content ?>
     </div>
     <footer>

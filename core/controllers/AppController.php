@@ -134,7 +134,7 @@ class AppController
         return static::$self->params;
     }
 
-    public static function getCofig()
+    public static function getConfig()
     {
         return static::$self->config;
     }

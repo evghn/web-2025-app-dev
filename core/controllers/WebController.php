@@ -35,4 +35,21 @@ class WebController
             )[0]
         );
     }
+
+
+    public function isPost()
+    {
+        return $_SERVER["REQUEST_METHOD"] == "POST";
+    }
+
+    public function redirect($url)
+    {
+        header("location: " . $url);
+        exit;
+    }
+
+    public function post()
+    {
+        return $_POST;
+    }
 }

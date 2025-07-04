@@ -13,4 +13,17 @@ class BaseModel
             }
         }
     }
+
+    public function getAttribute()
+    {
+        $result = [];
+        $fields = get_object_vars($this);
+        foreach ($fields as $field => $val) {
+            if (!is_object($val) && !method_exists($this, $field)) {
+                $result[$field] = $val;
+            }
+        }
+
+        return $result;
+    }
 }

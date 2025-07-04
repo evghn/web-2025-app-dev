@@ -10,16 +10,16 @@ class Db
     public $conn;
     private static ?object $_self = null;
 
-    private function __construct()
+    private function __construct(array $config)
     {
-        $this->conn = DriverManager::getConnection(require FILE_CONFIG_DB);
+        $this->conn = DriverManager::getConnection($config);
     }
 
 
-    public static function getInstance()
+    public static function getInstance(?array $config = null)
     {
         if (self::$_self === null) {
-            self::$_self = new self();
+            self::$_self = new self($config);
         }
 
         return self::$_self;
