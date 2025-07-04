@@ -27,7 +27,6 @@ try {
     // $view->controller = "site";
     // echo $view->render("index", ["name" => "User NAme"]);
 
-    AppController::run();
+    AppController::run($config);
 } catch (Exception $e) {
-    
 }

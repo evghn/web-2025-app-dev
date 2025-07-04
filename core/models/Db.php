@@ -7,11 +7,8 @@ use Exception;
 
 class Db
 {
-
     public $conn;
     private static ?object $_self = null;
-
-
 
     private function __construct()
     {

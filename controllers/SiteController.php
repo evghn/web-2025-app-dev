@@ -10,15 +10,13 @@ class SiteController extends WebController
     public function actionIndex()
     {
         $data = [
-            "user" => "user - name",
+            "name" => "user - name",
         ];
-        return $this->render('index', compact('data'));
+        return $this->render('index', $data);
     }
 
     public function actionAbout()
     {
         return $this->render('about');
     }
-
-    
 }

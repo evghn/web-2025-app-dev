@@ -8,10 +8,10 @@ use core\exceptions\NotFoundFileException;
 class BaseView
 {
     public string $layout = "";
-    private string $layoutDefault = "main.php";
+    private string $layoutDefault = "main";
     public $controller = "";
     private $cssFiles = [];
-    private string $pathCss = WEB_PATH . "css/";
+    private string $pathCss = ASSETS_CSS_PATH;
     private string $mainCss = "main.css";
     private string $viewPath = VIEW_PATH;
 
@@ -24,28 +24,19 @@ class BaseView
         // die;
     }
 
+
+    public function renderLayout(string $html): string
+    {
+        $fileLayout = $this->layout . ".php";
+        return $this->renderFile($fileLayout, ["content" => $html]);
+    }
+
     public function render(string $fileHtml = "", array $data = []): string
     {
-
-
-        if (!empty($fileHtml)) {
-            $content = $this->renderFile(
-                $this->viewPath
-                    . $this->controller . "/"
-                    . "$fileHtml.php",
-                $data
-            );
-        } else {
-            if (empty($data)) {
-                $content = "";
-            } else {
-                $content = $data["content"];
-            }
-        }
-
-        $data = ["content" => $content];
-
-        return $this->renderFile($this->layout, $data);
+        return $this->renderFile(
+            $this->viewPath . "$fileHtml.php",
+            $data
+        );
     }
 
     public function renderFile(string $fileHtml, array $data = [])
@@ -67,7 +58,7 @@ class BaseView
         $this->cssFiles[] = $fileCss;
     }
 
-    public function getCssFiles()
+    public function getLinkCssFiles()
     {
         return implode("\n", array_map(function ($val) {
             if (file_exists(APP_PATH . $val)) {

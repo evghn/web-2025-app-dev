@@ -1,6 +1,6 @@
 <div>
-    это страница!
-    <?= $this->controller ?>
+    это страница site/index!
+
     <div>
         <?= $name ?>
     </div>

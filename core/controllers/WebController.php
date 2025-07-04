@@ -3,25 +3,36 @@
 namespace core\controllers;
 
 use core\models\BaseView;
+use core\models\User;
 
-class WebController extends BaseController
+
+class WebController
 {
-    public object $view;
+    public ?object $view = null;
+    public ?object $user = null;
+
 
     public function __construct()
     {
+        session_start();
         $this->view = new BaseView();
-        // var_dump(pathinfo($this::class));
-        // die;
-        $this->view->controller = $this->getId();
-        // var_dump($this->view->controller);
+        $this->user = new User();
     }
 
-    public function render(string $fileHtml = "", array $data = [])
+    public function render(string $fileHtml, array $data = []): string
     {
-        return $this->view->render($fileHtml, $data);
-        
+        return $this->view->renderLayout(
+            $this->view->render($this->getId() . "/" . $fileHtml, $data)
+        );
     }
 
-    
+    public function getId()
+    {
+        return strtolower(
+            explode(
+                "Controller",
+                pathinfo(get_class($this))["filename"]
+            )[0]
+        );
+    }
 }
