@@ -14,7 +14,6 @@ class WebController
 
     public function __construct()
     {
-        session_start();
         $this->view = new BaseView();
         $this->user = new User();
     }

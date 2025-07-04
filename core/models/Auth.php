@@ -8,5 +8,14 @@ class Auth
 
     public function getIdentity() {}
 
-    public function login() {}
+    public static function login(string $login, string $password): bool
+    {
+        $model = new User();
+        $user = $model->findByLogin($login);
+
+        if (!$user || !$model->validatePassword($password)) {
+            return false;
+        }
+        return true;
+    }
 }
